@@ -2,21 +2,40 @@
 
 namespace App\Elastic\Observer;
 
+use Elasticsearch\Client;
 use Illuminate\Database\Eloquent\Model;
 
 class ElasticSearchObserver
 {
+    protected $client;
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
     public function created(Model $model)
     {
-        app('elastic')->index([
+        if (!$this->setIndexIfNotExist($model->getIndexKey())) {
+            $this->setIndexMapping($model);
+        }
+        $this->client->index([
             'index' => $model->getIndexKey(),
-            'type' => $model->getTypeKey(),
             'id' => $model->getId(),
             'body' => $model->toArray(),
-            'client' => [
-                'future' => 'lazy'
-            ]
         ]);
+    }
+    /**
+     * check if index exist or not 
+     */
+    protected function setIndexIfNotExist($index): bool
+    {
+        return  $this->client->indices()->exists(['index' => $index]);
+    }
+    /**
+     * set mapping 
+     */
+    protected function setIndexMapping($model)
+    {
+        return $this->client->indices()->create($model->getElaticMapping());
     }
     /**
      * Creating index if not exist 
@@ -24,9 +43,8 @@ class ElasticSearchObserver
      */
     public function updated(Model $model)
     {
-        app('elastic')->update([
+        $this->client->update([
             'index' => $model->getIndexKey(),
-            'type' => $model->getTypeKey(),
             'id' => $model->getId(),
             'body' => $model->toArray(),
             'client' => [
@@ -40,9 +58,8 @@ class ElasticSearchObserver
      */
     public  function deleted(Model $model)
     {
-        app('elastic')->update([
+        $this->client->update([
             'index' => $model->getIndexKey(),
-            'type' => $model->getTypeKey(),
             'id' => $model->getId(),
             'client' => [
                 'future' => 'lazy'

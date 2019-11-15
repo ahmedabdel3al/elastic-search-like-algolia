@@ -13,13 +13,30 @@
 
 use App\Elastic\Elastic;
 use App\Post;
+use Elasticsearch\Client;
 use Illuminate\Http\Request;
 
-Route::get('/search', function (Request $request) {
-    $elatic = new Elastic;
-    return response()->json(['data' => $elatic->search($request->q, new Post()), 'count' => count($elatic->search($request->q, new Post()))]);
+Route::get('elastic-match', function (Client $client) {
+    $params = [
+        'index' => 'elastic-posts',
+    ];
+    $response = $client->indices()->getMapping($params);
+    return $response;
 });
-
-Auth::routes();
-
-Route::resource('posts', 'PostController')->only('index', 'show');
+Route::get('set-mapping', function (Client $client) {
+    $params = [
+        'index' => 'elastic-posts',
+        'type' => 'posts',
+        'body' => [
+            '_source' => [
+                'enabled' => true
+            ],
+            'properties' => [
+                'created_at' => [
+                    "type" => "date",
+                ]
+            ]
+        ]
+    ];
+    $response = $client->indices()->putMapping($params);
+});

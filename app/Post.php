@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use ElasticSearch;
+    //use ElasticSearch;
     protected $fillable = ['title', 'body'];
     public function getElaticMapping()
     {

@@ -11,32 +11,7 @@
 |
 */
 
-use App\Elastic\Elastic;
-use App\Post;
-use Elasticsearch\Client;
-use Illuminate\Http\Request;
 
-Route::get('elastic-match', function (Client $client) {
-    $params = [
-        'index' => 'elastic-posts',
-    ];
-    $response = $client->indices()->getMapping($params);
-    return $response;
-});
-Route::get('set-mapping', function (Client $client) {
-    $params = [
-        'index' => 'elastic-posts',
-        'type' => 'posts',
-        'body' => [
-            '_source' => [
-                'enabled' => true
-            ],
-            'properties' => [
-                'created_at' => [
-                    "type" => "date",
-                ]
-            ]
-        ]
-    ];
-    $response = $client->indices()->putMapping($params);
-});
+Auth::routes();
+route::get('posts', 'PostController@index');
+route::get('get-posts', 'PostController@getPosts');

@@ -14,19 +14,22 @@ class ElasticSearchObserver
     }
     public function created(Model $model)
     {
-        if (!$this->setIndexIfNotExist($model->getIndexKey())) {
+        if (!$this->indexExist($model->getIndexKey())) {
             $this->setIndexMapping($model);
         }
         $this->client->index([
             'index' => $model->getIndexKey(),
             'id' => $model->getId(),
             'body' => $model->toArray(),
+            'client' => [
+                'future' => 'lazy'
+            ]
         ]);
     }
     /**
      * check if index exist or not 
      */
-    protected function setIndexIfNotExist($index): bool
+    protected function indexExist($index): bool
     {
         return  $this->client->indices()->exists(['index' => $index]);
     }

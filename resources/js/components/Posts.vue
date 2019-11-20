@@ -7,6 +7,7 @@
     :isLoading.sync="isLoading"
     @on-search="onSearch"
     @on-sort-change="onSortChange"
+    :select-options="{ enabled: true }"
     :pagination-options="{
     enabled: true,
     }"
@@ -22,7 +23,7 @@
 export default {
   data() {
     return {
-      searchKey: undefined,
+      searchKey: null,
       isLoading: false,
       columns: [
         //...
@@ -58,17 +59,23 @@ export default {
     },
     onSearch(params) {
       this.searchKey = params.searchTerm;
+      this.getDataFromServer(
+        this.serverParams.page,
+        this.serverParams.perPage,
+        this.searchKey
+      );
     },
     onSortChange(params) {
       this.getDataFromServer(
         this.serverParams.page,
         this.serverParams.perPage,
+        this.searchKey,
         `sort=${params[0].field},${params[0].type}`
       );
     },
-    async getDataFromServer(page, perPage, sort = null) {
+    async getDataFromServer(page, perPage, key = null, sort = null) {
       let posts = await axios.get(
-        `get-posts?page=${page}&per_page=${perPage}&${sort}&q=${this.searchKey}`
+        `get-posts?page=${page}&per_page=${perPage}&${sort}&q=${key}`
       );
       this.columns = posts.data.columns;
       this.rows = posts.data.posts.data;

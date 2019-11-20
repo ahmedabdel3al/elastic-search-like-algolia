@@ -1906,10 +1906,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      searchKey: undefined,
+      searchKey: null,
       isLoading: false,
       columns: [//...
       ],
@@ -1952,23 +1953,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     onSearch: function onSearch(params) {
       this.searchKey = params.searchTerm;
+      this.getDataFromServer(this.serverParams.page, this.serverParams.perPage, this.searchKey);
     },
     onSortChange: function onSortChange(params) {
-      this.getDataFromServer(this.serverParams.page, this.serverParams.perPage, "sort=".concat(params[0].field, ",").concat(params[0].type));
+      this.getDataFromServer(this.serverParams.page, this.serverParams.perPage, this.searchKey, "sort=".concat(params[0].field, ",").concat(params[0].type));
     },
     getDataFromServer: function getDataFromServer(page, perPage) {
-      var sort,
+      var key,
+          sort,
           posts,
           _args2 = arguments;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function getDataFromServer$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              sort = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : null;
-              _context2.next = 3;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("get-posts?page=".concat(page, "&per_page=").concat(perPage, "&").concat(sort, "&q=").concat(this.searchKey)));
+              key = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : null;
+              sort = _args2.length > 3 && _args2[3] !== undefined ? _args2[3] : null;
+              _context2.next = 4;
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("get-posts?page=".concat(page, "&per_page=").concat(perPage, "&").concat(sort, "&q=").concat(key)));
 
-            case 3:
+            case 4:
               posts = _context2.sent;
               this.columns = posts.data.columns;
               this.rows = posts.data.posts.data;
@@ -1976,7 +1980,7 @@ __webpack_require__.r(__webpack_exports__);
               this.serverParams.page = posts.data.posts.current_page;
               this.serverParams.perPage = posts.data.posts.per_page;
 
-            case 9:
+            case 10:
             case "end":
               return _context2.stop();
           }
@@ -53574,6 +53578,7 @@ var render = function() {
       mode: "remote",
       totalRows: _vm.totalRecords,
       isLoading: _vm.isLoading,
+      "select-options": { enabled: true },
       "pagination-options": {
         enabled: true
       },
@@ -65907,15 +65912,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*******************************************!*\
   !*** ./resources/js/components/Posts.vue ***!
   \*******************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Posts_vue_vue_type_template_id_4ac4d2f8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Posts.vue?vue&type=template&id=4ac4d2f8& */ "./resources/js/components/Posts.vue?vue&type=template&id=4ac4d2f8&");
 /* harmony import */ var _Posts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Posts.vue?vue&type=script&lang=js& */ "./resources/js/components/Posts.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Posts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Posts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -65945,7 +65949,7 @@ component.options.__file = "resources/js/components/Posts.vue"
 /*!********************************************************************!*\
   !*** ./resources/js/components/Posts.vue?vue&type=script&lang=js& ***!
   \********************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

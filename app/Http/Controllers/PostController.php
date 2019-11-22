@@ -24,6 +24,6 @@ class PostController extends Controller
         }
 
 
-        return response()->json(['posts' => $posts->paginate($request->per_page), 'columns' => [['label' => 'Title', 'field' => 'title'], ['label' => 'Body', 'field' => 'body'],  ['label' => 'ID', 'field' => 'id']]]);
+        return response()->json(['posts' => $posts->with('user')->paginate($request->per_page), 'columns' => [['label' => 'Title', 'field' => 'title'], ['label' => 'Body', 'field' => 'body'], ['label' => 'user', 'field' => 'user.name'],  ['label' => 'ID', 'field' => 'id']]]);
     }
 }

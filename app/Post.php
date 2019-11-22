@@ -4,11 +4,16 @@ namespace App;
 
 use App\Elastic\Traits\ElasticSearch\ElasticSearch;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
     //use ElasticSearch;
     protected $fillable = ['title', 'body'];
+    public function user()
+    {
+        return $this->BelongsTo(User::class);
+    }
     public function getElaticMapping()
     {
         return [

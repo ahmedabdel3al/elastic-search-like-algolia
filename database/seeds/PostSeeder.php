@@ -13,7 +13,8 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 1)->create();
-        factory(Post::class, 100)->create();
+        factory(User::class, 10)->create()->each(function ($item) {
+            $item->posts()->saveMany(factory(Post::class, 2)->make());
+        });
     }
 }
